@@ -1,0 +1,356 @@
+/*
+ * Dark theme for the Channels DVR admin web UI (Bootstrap 4 based).
+ * Injected via nginx sub_filter — see channels-dvr-dark.conf.
+ * Targets real component classes (.card, .form-control, .navbar, .dropdown-item,
+ * .btn-*, .table, .modal-*) rather than a blanket color-invert filter, so photos,
+ * channel logos and posters are left untouched.
+ */
+
+:root {
+  --cdvr-bg: #16171b;
+  --cdvr-surface: #1f2126;
+  --cdvr-surface-2: #262930;
+  --cdvr-surface-3: #2e323b;
+  --cdvr-border: #383c44;
+  --cdvr-text: #c4c4c8; /* capped below pure white — avoids glare on a near-black page */
+  --cdvr-text-muted: #9a9ea6;
+  --cdvr-link: #7aa2ff;
+  --cdvr-primary: #3d7fee; /* blue, matches --cdvr-link's hue family */
+}
+
+html, body, #root {
+  background-color: var(--cdvr-bg) !important;
+  color: var(--cdvr-text) !important;
+}
+
+/* Headings / generic text */
+h1, h2, h3, h4, h5, h6,
+.text-dark {
+  color: var(--cdvr-text) !important;
+}
+
+/* .black is a literal hardcoded color:#000 utility class (e.g. the guide
+   grid's channel-number links) — invisible against a dark background until
+   hovered, since only the hover state has a non-black color. */
+.black {
+  color: var(--cdvr-text) !important;
+}
+
+p, span, label, li, td, th, dt, dd {
+  color: inherit;
+}
+
+.text-muted,
+.small.text-muted {
+  color: var(--cdvr-text-muted) !important;
+}
+
+a {
+  color: var(--cdvr-link);
+}
+a:hover {
+  color: #a9c6ff;
+}
+
+hr,
+.border,
+.border-top,
+.border-bottom,
+.border-left,
+.border-right {
+  border-color: var(--cdvr-border) !important;
+}
+
+/* Top navbar: already dark in the app, just align it with the palette */
+.navbar.bg-dark,
+nav.navbar-dark {
+  background-color: #131418 !important;
+  border-bottom: 1px solid var(--cdvr-border);
+}
+.navbar-dark .navbar-nav .nav-link {
+  color: var(--cdvr-text) !important;
+}
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link.active {
+  color: var(--cdvr-text) !important;
+}
+
+/* Sidebar / settings nav links */
+.list-group-item,
+a.list-group-item {
+  background-color: var(--cdvr-surface) !important;
+  color: var(--cdvr-text) !important;
+  border-color: var(--cdvr-border) !important;
+}
+.list-group-item.active,
+a.active,
+.nav-link.active,
+.dropdown-item.active,
+.btn.active {
+  background-color: var(--cdvr-primary) !important;
+  border-color: var(--cdvr-primary) !important;
+  color: var(--cdvr-text) !important;
+}
+
+/* Cards / panels */
+.card {
+  background-color: var(--cdvr-surface) !important;
+  border-color: var(--cdvr-border) !important;
+  color: var(--cdvr-text) !important;
+}
+.card-header,
+.card-footer {
+  background-color: var(--cdvr-surface-2) !important;
+  border-color: var(--cdvr-border) !important;
+}
+.bg-white,
+.bg-light {
+  background-color: var(--cdvr-surface) !important;
+  color: var(--cdvr-text) !important;
+}
+
+/* Forms */
+.form-control,
+.form-select,
+input,
+textarea,
+select {
+  background-color: var(--cdvr-surface-2) !important;
+  border-color: var(--cdvr-border) !important;
+  color: var(--cdvr-text) !important;
+}
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--cdvr-surface-2) !important;
+  color: var(--cdvr-text) !important;
+  border-color: var(--cdvr-primary) !important;
+  box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.35) !important;
+}
+.form-control::placeholder {
+  color: var(--cdvr-text-muted) !important;
+}
+.form-control:disabled,
+.form-control[readonly] {
+  background-color: var(--cdvr-surface) !important;
+  color: var(--cdvr-text-muted) !important;
+}
+.input-group-text {
+  background-color: var(--cdvr-surface-3) !important;
+  border-color: var(--cdvr-border) !important;
+  color: var(--cdvr-text) !important;
+}
+.custom-control-label::before {
+  background-color: var(--cdvr-surface-2) !important;
+  border-color: var(--cdvr-border) !important;
+}
+
+/* Buttons */
+.btn-light,
+.btn-outline-secondary,
+.btn-secondary,
+.btn-default,
+.btn-primary,
+.dropdown-toggle {
+  background-color: var(--cdvr-surface-3) !important;
+  border-color: var(--cdvr-border) !important;
+  color: var(--cdvr-text) !important;
+}
+.btn-light:hover,
+.btn-outline-secondary:hover,
+.btn-secondary:hover {
+  background-color: #3a3f49 !important;
+}
+.btn-outline-secondary {
+  background-color: transparent !important;
+}
+
+/* .btn-purple is the app's own hardcoded branded-CTA class (e.g. "Learn
+   More" links across Settings pages) — a different purple than the old
+   --cdvr-primary default, and untouched by the earlier purple-to-blue
+   variable change since it never used that variable. */
+.btn-purple {
+  background-color: var(--cdvr-primary) !important;
+  border-color: var(--cdvr-primary) !important;
+  color: var(--cdvr-text) !important;
+}
+
+/* Progress bars (RAM/Disk usage on Status page) — the colored fill is fine,
+   but the unfilled track defaults to light gray. */
+.progress {
+  background-color: var(--cdvr-surface-2) !important;
+}
+
+/* Tables */
+.table {
+  color: var(--cdvr-text) !important;
+  border-color: var(--cdvr-border) !important;
+}
+.table thead th {
+  background-color: var(--cdvr-surface-2) !important;
+  border-color: var(--cdvr-border) !important;
+  color: var(--cdvr-text) !important;
+}
+.table td,
+.table th {
+  border-color: var(--cdvr-border) !important;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+}
+.table-hover tbody tr:hover {
+  background-color: var(--cdvr-surface-2) !important;
+}
+
+/* Dropdown menus */
+.dropdown-menu {
+  background-color: var(--cdvr-surface-2) !important;
+  border-color: var(--cdvr-border) !important;
+}
+.dropdown-item {
+  color: var(--cdvr-text) !important;
+}
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--cdvr-surface-3) !important;
+  color: var(--cdvr-text) !important;
+}
+.dropdown-divider {
+  border-color: var(--cdvr-border) !important;
+}
+
+/* DVR Calendar grid (/dvr/calendar) — a custom component, not Bootstrap:
+   .header = day column headers, .job = scheduled/upcoming recordings,
+   .file.recorded = past recordings. All render light by default. */
+.job-calendar {
+  background-color: var(--cdvr-bg) !important;
+}
+.header {
+  background-color: var(--cdvr-surface-3) !important;
+  color: var(--cdvr-text) !important;
+  border-color: var(--cdvr-border) !important;
+}
+.header.today {
+  background-color: var(--cdvr-primary) !important;
+  color: var(--cdvr-text) !important;
+}
+.job {
+  background-color: #2a2733 !important;
+  color: var(--cdvr-text) !important;
+  border-color: var(--cdvr-border) !important;
+}
+.file {
+  background-color: var(--cdvr-surface-2) !important;
+  color: var(--cdvr-text) !important;
+  border-color: var(--cdvr-border) !important;
+}
+.file.recorded {
+  background-color: #1e3320 !important;
+}
+
+/* Live TV guide grid (/guide/grid) — the sticky time-slot header row, and
+   every program cell's own light-gray border (hundreds of them per screen,
+   which is what reads as "too white" overall even with a dark background). */
+.guide-time-cell {
+  background-color: var(--cdvr-surface-3) !important;
+  color: var(--cdvr-text) !important;
+}
+.guide-airing-cell,
+.guide-channel-cell {
+  border-color: var(--cdvr-border) !important;
+}
+
+/* react-select pickers (channel/genre/source/keyword search) — a separate
+   library from the rest of the UI, styled via its own emotion-generated
+   "css-<hash>-<part>" classes. The hash prefix isn't stable across builds,
+   but the "-control"/"-menu"/etc. suffix is, so target on that. */
+[class$="-control"] {
+  background-color: var(--cdvr-surface-2) !important;
+  border-color: var(--cdvr-border) !important;
+}
+[class$="-menu"] {
+  background-color: var(--cdvr-surface-2) !important;
+}
+[class$="-option"] {
+  background-color: var(--cdvr-surface-2) !important;
+  color: var(--cdvr-text) !important;
+}
+[class$="-placeholder"] {
+  color: var(--cdvr-text-muted) !important;
+}
+[class$="-singleValue"],
+[class$="-input"],
+[class$="-input"] input {
+  color: var(--cdvr-text) !important;
+}
+[class$="-multiValue"] {
+  background-color: var(--cdvr-surface-3) !important;
+}
+[class$="-multiValueLabel"] {
+  color: var(--cdvr-text) !important;
+}
+[class$="-indicatorSeparator"] {
+  background-color: var(--cdvr-border) !important;
+}
+
+/* Bootstrap alert boxes — dark-tinted versions of the usual variants,
+   keeping the color coding but not blasting a light box on a dark page. */
+.alert {
+  border-color: var(--cdvr-border) !important;
+}
+.alert-info {
+  background-color: #16333d !important;
+  color: #9fd8e8 !important;
+}
+.alert-warning {
+  background-color: #3d3416 !important;
+  color: #e8d89f !important;
+}
+.alert-success {
+  background-color: #1a3d20 !important;
+  color: #a8e8b0 !important;
+}
+.alert-danger {
+  background-color: #3d1a1a !important;
+  color: #e8a8a8 !important;
+}
+
+/* Modals */
+.modal-content {
+  background-color: var(--cdvr-surface) !important;
+  color: var(--cdvr-text) !important;
+  border-color: var(--cdvr-border) !important;
+}
+.modal-header,
+.modal-footer {
+  border-color: var(--cdvr-border) !important;
+}
+.close {
+  color: var(--cdvr-text) !important;
+  text-shadow: none !important;
+}
+
+/* Code / pre blocks */
+pre, code, kbd {
+  background-color: var(--cdvr-surface-2) !important;
+  color: var(--cdvr-text) !important;
+}
+
+/* Scrollbars (WebKit / Chromium) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--cdvr-bg);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--cdvr-surface-3);
+  border-radius: 6px;
+  border: 3px solid var(--cdvr-bg);
+}
+
+/* Leave real artwork alone: channel logos, posters, thumbnails, icons */
+img, video, svg, picture,
+[style*="background-image"] {
+  filter: none !important;
+}
