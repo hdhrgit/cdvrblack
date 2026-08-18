@@ -1,11 +1,17 @@
 # cdvrblack — dark mode for the Channels DVR admin UI
 
-Channels DVR's server always binds `0.0.0.0` on its port — there's no supported
-config to restrict it to loopback (confirmed by the developers on the
-[community forum](https://community.getchannels.com/t/dvr-network-interface-binding/33516)).
-So instead of rebinding CDVR, this runs nginx as a second front door on a
-different port that proxies to CDVR and injects a dark stylesheet into the
-HTML response.
+The Channels DVR binary actually does support binding to a specific address —
+`channels-dvr -h` shows a `-host string` flag ("bind address for local web
+interface") — despite the developers stating on the
+[community forum](https://community.getchannels.com/t/dvr-network-interface-binding/33516)
+that it always binds `0.0.0.0`. That forum thread is either outdated or wrong;
+trust `-h` over it.
+
+This project doesn't use `-host` though: rebinding CDVR to loopback and
+making nginx the sole external door was considered and deliberately not
+done (see git history / project discussion) — the simpler two-port setup
+below was chosen instead. Revisit `-host 127.0.0.1` if you want CDVR
+unreachable except through nginx.
 
 - `http://<host>:8089` — unchanged, normal light-mode CDVR
 - `http://<host>:8088` — same UI, dark mode, via nginx
