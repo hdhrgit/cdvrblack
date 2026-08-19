@@ -180,6 +180,14 @@ select {
   background-color: var(--cdvr-surface-2) !important;
 }
 
+/* Breadcrumb bar (e.g. Shows > Show Name on a show detail page) */
+.breadcrumb {
+  background-color: var(--cdvr-surface-2) !important;
+}
+.breadcrumb-item.active {
+  color: var(--cdvr-text-muted) !important;
+}
+
 /* Tables */
 .table {
   color: var(--cdvr-text) !important;
