@@ -75,6 +75,19 @@ nav.navbar-dark {
   color: var(--cdvr-text) !important;
 }
 
+/* The Settings/Live TV dropdowns' "active" tracking is a pre-existing app
+   bug: it doesn't sync with sidebar navigation, so after clicking a sidebar
+   item the dropdown can show the *previous* item still marked active
+   alongside the real one — two highlighted rows at once, plus a third
+   color on hover. Can't fix the underlying state from CSS, but stripping
+   the active highlight here removes the visual confusion; the sidebar
+   (which does stay in sync) remains the reliable "you are here" indicator,
+   and hover still gives real-time feedback. */
+.navbar .dropdown-item.active {
+  background-color: transparent !important;
+  color: var(--cdvr-text) !important;
+}
+
 /* Sidebar / settings nav links */
 .list-group-item,
 a.list-group-item {
