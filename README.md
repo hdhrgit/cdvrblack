@@ -10,8 +10,8 @@ No CDVR config changes. No firewall changes. Nothing rebinds.
 
 ## How it works
 
-`nginx/channels-dvr-dark.conf` proxies everything on `:8088` to
-`127.0.0.1:8089`, and uses nginx's `sub_filter` to insert
+`nginx/channels-dvr-dark.conf` proxies everything on the dark-mode port
+(above) to CDVR's own port, and uses nginx's `sub_filter` to insert
 `<link rel="stylesheet" href="/__cdvr-dark-mode__.css">` right before
 `</head>` in every HTML page. That CSS file
 (`nginx/dark-mode.css`) is served directly by nginx from a fixed path.
@@ -40,15 +40,17 @@ sudo dnf install nginx       # Fedora/RHEL
 sudo systemctl enable --now nginx
 ```
 
-Then browse to `http://<host-ip>:8088`.
+Then browse to the dark-mode URL shown at the top of this file.
 
 ## Notes / things to check after installing
 
-- **Port 8088 must be free.** Change the `listen 8088;` line in the conf if
-  something else already uses it.
-- **CDVR must already be listening on 8089 on the same host** (default). If
-  your CDVR is on a different port, update `proxy_pass http://127.0.0.1:8089;`
-  accordingly.
+- **The dark-mode port must be free.** Change the `listen` line in the
+  conf if something else already uses that port.
+- **CDVR must already be listening on the same host** (its default port,
+  out of the box). If your CDVR is on a different port (or scheme),
+  update the `set $cdvr_address ...;` line — it feeds both `proxy_pass`
+  and the HLS URL rewrite (see below), so it only needs changing in one
+  place.
 - Live status / recording-progress updates use WebSockets — the config
   forwards `Upgrade`/`Connection` headers for that, so those should keep
   working through the dark-mode port too.
@@ -56,9 +58,21 @@ Then browse to `http://<host-ip>:8088`.
   (Bootstrap 4), not from an official CDVR dark theme — none exists upstream
   as of this writing. If a CDVR update changes its markup/classes, some
   elements may fall back to unstyled light colors until `dark-mode.css` is
-  touched up — nothing will break functionally, since :8089 keeps working
-  regardless.
+  touched up — nothing will break functionally, since the plain light-mode
+  URL keeps working regardless.
 - Tabs/sections not visited during this build (e.g. `Live TV & DVR`,
   `Clients`, `Advanced`, `About`, and various modals) weren't individually
   checked — they use the same Bootstrap components so they should inherit
   the theme, but worth a quick look after installing.
+- **Live TV/recording playback**: CDVR bakes its own real address into the
+  HLS manifest it returns, which breaks playback through the dark-mode
+  port. The config strips that down to a relative path via `sub_filter`,
+  so the player's follow-up requests naturally come back through this
+  proxy instead.
+  This same variable is also what `proxy_pass` uses to actually reach
+  CDVR. It's hardcoded to loopback for simplicity/reliability of that
+  same-box hop — if you've configured CDVR (via its own `-host` flag) to
+  not listen on loopback, or if you ever split nginx and CDVR onto
+  different boxes/containers, change that line to CDVR's real reachable
+  address instead. Scheme is included too, so a future CDVR change to
+  HTTPS on its own port would only need changing here as well.
